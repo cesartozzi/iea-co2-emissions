@@ -208,6 +208,4 @@ docker run hello-world
 - [Docker Compose Releases](https://github.com/docker/compose/releases)
 ```
 
-### How to use this `README.md`
-- Add this to the root of your GitHub repository.
-- The commands and explanations are formatted as steps that users can follow, with explanations for each part of the setup.
+
