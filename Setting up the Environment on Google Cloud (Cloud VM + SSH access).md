@@ -1,6 +1,3 @@
-Sure! Here's how you can format the instructions into a `README.md` file suitable for a GitHub repository:
-
-```markdown
 # Google Cloud VM Setup with Docker and Anaconda
 
 This guide walks you through setting up a Google Cloud Platform (GCP) Virtual Machine (VM), configuring SSH access, installing Docker, and setting up Docker Compose and Anaconda.
@@ -17,10 +14,16 @@ First, create an SSH key pair to access your Google Cloud VM.
 ```bash
 # Navigate to the home directory and create an `.ssh` directory if it doesn't exist.
 cd ~
+# Create a hidden directory `.ssh` to store your SSH keys.
 mkdir -p .ssh
+# Navigate into the `.ssh` directory.
 cd .ssh/
 
 # Generate a new RSA key pair for GCP
+# - `-t rsa`: Specifies the type of key to create (RSA).
+# - `-f gcp`: Specifies the filename for the key.
+# - `-C co2project`: Adds a comment (this is optional, useful for identifying the key).
+# - `-b 2048`: Specifies the key size (2048 bits, which is a good default for RSA).
 ssh-keygen -t rsa -f gcp -C co2project -b 2048
 ```
 
@@ -47,11 +50,13 @@ ssh-keygen -t rsa -f gcp -C co2project -b 2048
 
 ```bash
 # Use the private key to connect to the VM
-ssh -i ~/.ssh/gcp co2project@<external-ip-address>
+# - `-i ~/.ssh/gcp`: Specifies the private key for authentication.
+# - Connect to the instance with the user at the provided IP address.
+ssh -i ~/.ssh/gcp user@<external-ip-address>
 ```
 
 ### 5. Install Anaconda
-1. Download the Anaconda installer:
+1. Once connected, download the Anaconda installer (choose the latest version https://repo.anaconda.com/archive):
    ```bash
    wget https://repo.anaconda.com/archive/Anaconda3-2024.06-1-Linux-x86_64.sh
    ```
@@ -75,6 +80,11 @@ touch config
 # Open the config file and add the following entry
 # Replace `<external-ip-address>` with your VM's external IP
 code config
+
+# - `Host : Assigns an alias to this connection (so you can type `ssh alias` to connect).
+# - `HostName`: The external IP address of your instance.
+# - `User`: The username you use to connect to the instance.
+# - `IdentityFile`: The path to your private SSH key.
 
 Host co2-project
     HostName <external-ip-address>
