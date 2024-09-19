@@ -12,19 +12,50 @@ provider "google" {
   project = var.project_id
   region  = var.region
 }
+# #############################################
+# #               Enable API's                #
+# #############################################
 
-# Enable APIs
+# Enable IAM API
 resource "google_project_service" "iam" {
-  service = "iam.googleapis.com"
+  service            = "iam.googleapis.com"
+  disable_on_destroy = false
 }
 
-resource "google_project_service" "cloudrun" {
-  service = "run.googleapis.com"
+# Enable Artifact Registry API
+resource "google_project_service" "artifactregistry" {
+  service            = "artifactregistry.googleapis.com"
+  disable_on_destroy = false
+}
+
+# Enable Cloud Resource Manager API
+resource "google_project_service" "resourcemanager" {
+  service            = "cloudresourcemanager.googleapis.com"
+  disable_on_destroy = false
 }
 
 # Enable VCP Access API
 resource "google_project_service" "vpcaccess" {
   service            = "vpcaccess.googleapis.com"
+  disable_on_destroy = false
+}
+
+
+# Enable Cloud Run API
+resource "google_project_service" "cloudrun" {
+  service            = "run.googleapis.com"
+  disable_on_destroy = false
+}
+
+# Enable Secret Manager API
+resource "google_project_service" "secretmanager" {
+  service            = "secretmanager.googleapis.com"
+  disable_on_destroy = false
+}
+
+# Enable Cloud SQL Admin API
+resource "google_project_service" "sqladmin" {
+  service            = "sqladmin.googleapis.com"
   disable_on_destroy = false
 }
 
@@ -35,6 +66,7 @@ resource "google_project_service" "bigquery" {
 
 resource "google_project_service" "storage" {
   service = "storage.googleapis.com"
+  disable_on_destroy = false
 }
 
 # Create Cloud Run service
@@ -54,6 +86,14 @@ resource "google_cloud_run_service" "run_service" {
             cpu    = var.container_cpu
             memory = var.container_memory
           }
+		 }
+        env {
+          name  = "FILESTORE_IP_ADDRESS"
+          value = google_filestore_instance.instance.networks[0].ip_addresses[0]
+        }
+        env {
+          name  = "FILE_SHARE_NAME"
+          value = "share1"
         }
         env {
           name  = "GCP_PROJECT_ID"
@@ -75,10 +115,12 @@ resource "google_cloud_run_service" "run_service" {
     }
 
     metadata {
-      annotations = {
-        "autoscaling.knative.dev/minScale" = "1"
-        "run.googleapis.com/cpu-throttling" = false
+      annotations = {        
+		    "autoscaling.knative.dev/minScale"         = "1"
+        "run.googleapis.com/cpu-throttling"        = false
         "run.googleapis.com/execution-environment" = "gen2"
+        "run.googleapis.com/vpc-access-connector"  = google_vpc_access_connector.connector.id
+        "run.googleapis.com/vpc-access-egress"     = "private-ranges-only"
       }
     }
   }
@@ -96,7 +138,10 @@ resource "google_cloud_run_service" "run_service" {
   }
 
   autogenerate_revision_name = true
+  # Waits for the Cloud Run API to be enabled
+  depends_on = [google_project_service.cloudrun]
 }
+
 
 # Allow unauthenticated users to invoke the service
 resource "google_cloud_run_service_iam_member" "run_all_users" {
