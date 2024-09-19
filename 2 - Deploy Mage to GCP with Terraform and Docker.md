@@ -1,6 +1,3 @@
-Certainly! Here’s the complete `README.md` content formatted in Markdown:
-
-```markdown
 # Deploy Mage to GCP
 
 This guide outlines the steps to deploy Mage to Google Cloud Platform (GCP) using Terraform and remote access.

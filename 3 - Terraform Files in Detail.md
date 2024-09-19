@@ -1,4 +1,3 @@
-```markdown
 # Terraform Configuration Breakdown
 
 This document explains each section of the `main.tf` and `variables.tf` files used to deploy Mage to Google Cloud Platform (GCP).
