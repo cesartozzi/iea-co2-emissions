@@ -1,0 +1,2 @@
+{"operation": "create", "resource": {"type": "pipeline", "uuid": "example_pipeline_copy"}, "timestamp": 1726848622, "user": null}
+{"operation": "create", "resource": {"type": "pipeline", "uuid": "iea_co2_emissions"}, "timestamp": 1726851989, "user": null}

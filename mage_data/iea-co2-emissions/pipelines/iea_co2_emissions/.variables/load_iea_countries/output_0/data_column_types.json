@@ -1,0 +1,1 @@
+{"name": "str", "fullName": "str", "stats": "str", "iso2": "str", "iso3": "str", "isMember": "str", "isAssociation": "str", "isAccession": "str", "isOECD": "str", "show": "str", "regions": "list", "note": "str", "isRegion": "bool"}
