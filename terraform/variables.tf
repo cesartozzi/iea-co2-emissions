@@ -41,7 +41,7 @@ variable "repository" {
 variable "docker_image" {
   type        = string
   description = "The docker image to deploy to Cloud Run."
-  default     = "mageai/mageai:latest"
+  default     = "gcr.io/iea-co2-project/mageprod:latest"
 }
 
 variable "domain" {
